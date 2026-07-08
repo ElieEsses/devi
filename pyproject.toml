@@ -1,0 +1,25 @@
+[project]
+name = "cli-name"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "typer>=0.26.8",
+]
+
+[project.scripts]
+cli-name = "cli_name.cli:app"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[dependency-groups]
+dev = [
+    "pytest>=9.1.1",
+    "ruff>=0.15.20",
+]
+
+[tool.ruff.lint]
+select = ["E", "F", "I"]
