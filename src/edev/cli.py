@@ -11,7 +11,7 @@ def main():
 
 @app.command()
 def hello(name: str):
-    typer.echo(f"Hello, {name}!")
+    typer.secho(f"Hello, {name}!", fg=typer.colors.GREEN, bold=True)
 
 
 @app.command()

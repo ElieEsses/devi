@@ -1,5 +1,5 @@
 [project]
-name = "cli-name"
+name = "edev"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
@@ -9,7 +9,7 @@ dependencies = [
 ]
 
 [project.scripts]
-cli-name = "cli_name.cli:app"
+edev = "edev.cli:app"
 
 [build-system]
 requires = ["hatchling"]
