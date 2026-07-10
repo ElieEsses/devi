@@ -1,4 +1,5 @@
 import re
+import shutil
 import subprocess
 from enum import StrEnum
 from pathlib import Path
@@ -22,7 +23,7 @@ def main():
 TEMPLATES = {
     "cli": "https://github.com/ElieEsses/python-cli-template",
     "api": "https://github.com/ElieEsses/python-api-template.git",
-    "react": "elieesses04/react-ui-template",
+    "react": "https://github.com/ElieEsses/react-frontend-template.git",
 }
 
 
@@ -36,6 +37,12 @@ class Template(StrEnum):
 def new(
     template: Template,
     name: str,
+    local: bool = typer.Option(
+        False,
+        "--local",
+        "-l",
+        help="Create the project locally without creating a GitHub repository.",
+    ),
     private: bool = typer.Option(
         True,
         help="Create a private GitHub repository.",
@@ -47,19 +54,31 @@ def new(
         print(f"[red]Directory already exists: {name}[/red]")
         raise typer.Exit(1)
 
-    command = [
-        "gh",
-        "repo",
-        "create",
-        name,
-        "--template",
-        TEMPLATES[template],
-        "--clone",
-    ]
+    if local:
+        subprocess.run(
+            ["git", "clone", TEMPLATES[template], name],
+            check=True,
+        )
 
-    command.append("--private" if private else "--public")
+        shutil.rmtree(Path(name) / ".git")
 
-    subprocess.run(command, check=True)
+        subprocess.run(
+            ["git", "-C", name, "init"],
+            check=True,
+        )
+    else:
+        command = [
+            "gh",
+            "repo",
+            "create",
+            name,
+            "--template",
+            TEMPLATES[template],
+            "--clone",
+            "--private" if private else "--public",
+        ]
+
+        subprocess.run(command, check=True)
 
     print(f"[green]Created {name} from {TEMPLATES[template]}[/green]")
     print("")
@@ -128,6 +147,4 @@ def add(keys: list[str], no_ex: bool = False):
             f" and placeholder to {example_env_file}[/green]"
         )
     if no_ex:
-        print(
-            f"[green]Added [bold]{key}[/bold] to {env_file}."
-        )
+        print(f"[green]Added [bold]{key}[/bold] to {env_file}.")
