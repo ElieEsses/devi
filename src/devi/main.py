@@ -1,10 +1,16 @@
-from enum import StrEnum
+import re
 import subprocess
+from enum import StrEnum
 from pathlib import Path
 
 import typer
+from dotenv import dotenv_values, set_key
+from rich import print
 
 app = typer.Typer()
+env_app = typer.Typer(help="Manage environment variables")
+
+app.add_typer(env_app, name="env")
 
 
 @app.callback()
@@ -19,32 +25,26 @@ TEMPLATES = {
     "react": "elieesses04/react-ui-template",
 }
 
+
 class Template(StrEnum):
     cli = "cli"
     api = "api"
     react = "react"
-    
+
+
 @app.command()
-def new(template: Template, name: str, 
-        private: bool = typer.Option(
-            True,
-            help="Create a private GitHub repository.",
-        )
-    ):
+def new(
+    template: Template,
+    name: str,
+    private: bool = typer.Option(
+        True,
+        help="Create a private GitHub repository.",
+    ),
+):
     """Create a new project from one of your templates: api, cli, or react"""
-    if template not in TEMPLATES:
-        typer.secho(
-            f"Unknown template: {template}",
-            fg=typer.colors.RED,
-        )
-        typer.echo(f"Available templates: {', '.join(TEMPLATES)}")
-        raise typer.Exit(1)
 
     if Path(name).exists():
-        typer.secho(
-            f"Directory already exists: {name}",
-            fg=typer.colors.RED,
-        )
+        print(f"[red]Directory already exists: {name}[/red]")
         raise typer.Exit(1)
 
     command = [
@@ -61,15 +61,69 @@ def new(template: Template, name: str,
 
     subprocess.run(command, check=True)
 
-    typer.secho(
-        f"Created {name} from {TEMPLATES[template]}",
-        fg=typer.colors.GREEN,
-    )
-    typer.echo("")
-    typer.echo("Next:")
-    typer.echo(f"  cd {name}")
+    print(f"[green]Created {name} from {TEMPLATES[template]}[/green]")
+    print("")
+    print("Next:")
+    print(f"  cd {name}")
 
     if template in {"cli", "api"}:
-        typer.echo("  uv sync")
+        print("  uv sync")
     elif template == "react":
-        typer.echo("  npm install")
+        print("  npm install")
+
+
+ENV_KEY_PATTERN = re.compile(r"^[A-Z_][A-Z0-9_]*$")
+SECRET_SUFFIXES = ("_KEY", "_SECRET", "_TOKEN", "_PASSWORD")
+
+
+@env_app.command()
+def add(keys: list[str]):
+    """Add one or more environment variables."""
+
+    env_file = Path(".env")
+    example_env_file = Path(".env.example")
+
+    env_file.touch(exist_ok=True)
+    example_env_file.touch(exist_ok=True)
+
+    existing = dotenv_values(env_file)
+    example_existing = dotenv_values(example_env_file)
+
+    for key in keys:
+        key = key.upper()
+
+        if not ENV_KEY_PATTERN.fullmatch(key):
+            print(f"[red]Invalid environment variable name: {key}[/red]")
+            continue
+
+        if key in existing:
+            overwrite = typer.confirm(
+                f"{key} already exists. Overwrite?",
+                default=False,
+            )
+            if not overwrite:
+                continue
+
+        hidden = key.endswith(SECRET_SUFFIXES)
+
+        value = typer.prompt(
+            f"Enter value for {key}",
+            hide_input=hidden,
+        )
+
+        set_key(str(env_file), key, value)
+        existing[key] = value
+
+        if key not in example_existing:
+            set_key(
+                str(example_env_file),
+                key,
+                "",
+                quote_mode="never",
+            )
+            example_existing[key] = ""
+
+        print(
+            f"[green]Added [bold]{key}[/bold] to {env_file}"
+            f" and placeholder to {example_env_file}[/green]"
+        )
