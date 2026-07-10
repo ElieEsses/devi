@@ -23,7 +23,7 @@ def main():
 TEMPLATES = {
     "cli": "https://github.com/ElieEsses/python-cli-template",
     "api": "https://github.com/ElieEsses/python-api-template.git",
-    "react": "https://github.com/ElieEsses/react-frontend-template.git",
+    "react": "https://github.com/ElieEsses/react-ui-template.git",
 }
 
 
