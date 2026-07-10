@@ -75,7 +75,7 @@ def new(
             "--template",
             TEMPLATES[template],
             "--clone",
-            "--private" if not public else "--public",
+            "--private" if not public else "--public", 
         ]
 
         subprocess.run(command, check=True)
