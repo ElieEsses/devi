@@ -1,6 +1,26 @@
-## Description
-A growing personal dev tools CLI.
+# devi
 
+A growing personal dev tools CLI for scaffolding repos and managing project configs.
+
+## Installation
+
+### Prerequisites
+- [`uv`](https://docs.astral.sh/uv/) — Python package/tool manager
+- `make` (optional, only needed for `make install`)
+- 
+**Quick install:**
+```bash
+make install
+```
+
+**Manual:**
+```bash
+uv sync
+uv tool install -e .
+```
+
+Verify: `devi --help`
+Uninstall: `uv tool uninstall devi`
 ## Usage
 ### General Usage
 Once installed, use:
@@ -24,36 +44,3 @@ devi env add <variable-name>
 You will then be prompted to enter details.
 
 Variable name will be added automatically to ```.env.example```. To supress use flag ```--no-ex```.
-
-## Installation
-
-To install project dependencies, and install the CLI globally in editable mode:
-```bash
-make install
-```
-
-or
-
-Install the project dependencies:
-
-```bash
-uv sync
-```
-
-and install the CLI:
-
-```bash
-uv tool install -e .
-```
-
-Verify the installation:
-
-```bash
-cli-name --help
-```
-
-To uninstall:
-
-```bash
-uv tool uninstall cli-name
-```
