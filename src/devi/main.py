@@ -43,9 +43,9 @@ def new(
         "-l",
         help="Create the project locally without creating a GitHub repository.",
     ),
-    private: bool = typer.Option(
-        True,
-        help="Create a private GitHub repository.",
+    public: bool = typer.Option(
+        False,
+        help="Create a public GitHub repository.",
     ),
 ):
     """Create a new project from one of your templates: api, cli, or react"""
@@ -75,7 +75,7 @@ def new(
             "--template",
             TEMPLATES[template],
             "--clone",
-            "--private" if private else "--public",
+            "--private" if not public else "--public",
         ]
 
         subprocess.run(command, check=True)
