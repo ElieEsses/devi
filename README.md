@@ -38,6 +38,10 @@ devi add <template> <project-name>
 ```
 with either ```api```, ```cli```, or ```react``` as template.
 
+Use tag ```-local``` to only create repo locally, not in GitHub.
+
+Use tag. ```-public``` to make repo public instead of private.
+
 **Add and sync .env files**
 
 To add an enviromental variable use:
