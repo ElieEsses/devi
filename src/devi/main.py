@@ -77,7 +77,7 @@ SECRET_SUFFIXES = ("_KEY", "_SECRET", "_TOKEN", "_PASSWORD")
 
 
 @env_app.command()
-def add(keys: list[str]):
+def add(keys: list[str], no_ex: bool = False):
     """Add one or more environment variables."""
 
     env_file = Path(".env")
@@ -113,17 +113,21 @@ def add(keys: list[str]):
 
         set_key(str(env_file), key, value)
         existing[key] = value
-
-        if key not in example_existing:
-            set_key(
-                str(example_env_file),
-                key,
-                "",
-                quote_mode="never",
-            )
-            example_existing[key] = ""
-
+        if not no_ex:
+            if key not in example_existing:
+                set_key(
+                    str(example_env_file),
+                    key,
+                    "",
+                    quote_mode="never",
+                )
+                example_existing[key] = ""
+    if not no_ex:
         print(
             f"[green]Added [bold]{key}[/bold] to {env_file}"
             f" and placeholder to {example_env_file}[/green]"
+        )
+    if no_ex:
+        print(
+            f"[green]Added [bold]{key}[/bold] to {env_file}."
         )

@@ -21,7 +21,8 @@ To add an enviromental variable use:
 ```
 devi env add <variable-name>
 ```
-You will then be prompted to enter details
+You will then be prompted to enter details.
+
 Variable name will be added automatically to ```.env.example```. To supress use flag ```--no-ex```.
 
 ## Installation
