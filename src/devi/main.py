@@ -23,7 +23,6 @@ TEMPLATES = {
     "cli": "https://github.com/ElieEsses/python-cli-template",
     "api": "https://github.com/ElieEsses/python-api-template.git",
     "react": "elieesses04/react-ui-template",
-    
 }
 
 
