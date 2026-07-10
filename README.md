@@ -30,7 +30,7 @@ Once installed, use:
 
 Call ```devi --help``` for more details
 
-**New Repo from Template**
+**New repo from template**
 
 To create a new GitHub repository and clone locally use:
 ```
