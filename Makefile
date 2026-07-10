@@ -14,13 +14,13 @@ format:
 	uv run ruff format .
 
 fix:
-	uv run ruff check . 
+	uv run ruff check . --fix
 	uv run ruff format .
 
 test:
 	uv run pytest
 
 ci:
-	uv run ruff check .
+	uv run ruff check . --fix
 	uv run ruff format --check .
 	uv run pytest
