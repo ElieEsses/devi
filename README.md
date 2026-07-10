@@ -1,4 +1,5 @@
-## A growing personal dev tools CLI.
+## Description
+A growing personal dev tools CLI.
 
 ## Usage
 ### General Usage
