@@ -1,3 +1,6 @@
+## Description
+A growing personal dev tools CLI.
+
 ## Usage
 ### General Usage
 Once installed, use:
